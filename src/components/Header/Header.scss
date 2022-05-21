@@ -45,15 +45,37 @@
       }
       .cart-btn {
         display: flex;
+        align-items: flex-end;
+        line-height: 1;
         gap: 0.5rem;
-        color: hsl(0, 0%, 40%);
+        color: hsl(0, 0%, 55%);
         font-weight: 700;
-        &:hover path {
-          stroke: hsl(0, 0%, 41%);
+        transition: all 150ms ease-in-out;
+        path {
+          transition: all 150ms ease-in-out;
+        }
+        &:hover {
+          color: hsl(0, 0%, 41%);
+          path {
+            stroke: hsl(0, 0%, 41%);
+          }
         }
       }
-      .profile-btn:hover path {
-        fill: hsl(0, 0%, 41%);
+      .profile-btn {
+        path {
+          transition: all 150ms ease-in-out;
+        }
+        &:hover path {
+          fill: hsl(0, 0%, 41%);
+        }
+      }
+      .favorite-btn {
+        path {
+          transition: all 150ms ease-in-out;
+        }
+        &:hover path {
+          fill: hsl(0, 0%, 41%);
+        }
       }
     }
   }
