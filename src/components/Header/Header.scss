@@ -1,0 +1,60 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 96%);
+  @media (min-width: 600px) {
+    padding: 3rem 4rem;
+  }
+  &__left-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: -webkit-fill-available;
+    min-width: -moz-fit-content;
+    min-width: fit-content;
+    cursor: pointer;
+  }
+  &__logo {
+    display: block;
+  }
+  &__name {
+    h3 {
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    p {
+      font-weight: 600;
+      color: hsl(0, 0%, 55%);
+    }
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.3rem;
+    li {
+      button {
+        display: flex;
+        transition: all 150ms ease-in-out;
+      }
+      .cart-btn {
+        display: flex;
+        gap: 0.5rem;
+        color: hsl(0, 0%, 40%);
+        font-weight: 700;
+        &:hover path {
+          stroke: hsl(0, 0%, 41%);
+        }
+      }
+      .profile-btn:hover path {
+        fill: hsl(0, 0%, 41%);
+      }
+    }
+  }
+}
