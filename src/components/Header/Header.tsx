@@ -1,6 +1,10 @@
 import "./Header.scss";
 
-const Header = () => {
+type HeaderProps = {
+  setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Header = ({ setIsCartDrawerOpen }: HeaderProps) => {
   return (
     <header className="header">
       <div className="header__left-container">
@@ -19,7 +23,11 @@ const Header = () => {
       <div className="header__right-container">
         <ul>
           <li>
-            <button aria-label="open cart" className="cart-btn">
+            <button
+              aria-label="open cart"
+              className="cart-btn"
+              onClick={() => setIsCartDrawerOpen(true)}
+            >
               {/* Cart btn */}
               <svg
                 width="20"
