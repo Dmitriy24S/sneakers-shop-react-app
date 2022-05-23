@@ -11,7 +11,7 @@
 }
 
 .drawer-content {
-  scrollbar-gutter: stable;
+  // scrollbar-gutter: stable;
   // overflow: auto;
   overflow: overlay; // better for padding/spacing of drawer?
   position: fixed;
@@ -21,9 +21,12 @@
   top: 0;
   bottom: 0;
   width: 310px;
-  height: 100%;
+  height: 100%; /* Fallback */
+  height: -moz-available;
+  height: -webkit-fill-available;
+  height: fill-available;
+  height: stretch; /* Latest specification */
   padding: 1rem;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   @media (min-width: 400px) {
@@ -44,7 +47,7 @@
   gap: 1rem;
   margin-top: 1rem;
   margin-bottom: 4rem;
-  flex: 1;
+  // flex: 1;
 }
 
 .cart-item {
