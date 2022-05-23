@@ -8,6 +8,7 @@ function App() {
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState<boolean>(false);
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   const handleAddToCart = (item: any) => {
     setCartItems([...cartItems, item]);
@@ -35,7 +36,8 @@ function App() {
     if (isCartDrawerOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      // document.body.style.overflow = "unset";
+      document.body.style.overflow = "overlay"; // better for padding/spacing ? prevents slider image zoom in/out when open cart drawer
     }
   }, [isCartDrawerOpen]);
 
@@ -54,6 +56,8 @@ function App() {
         items={items}
         handleAddToCart={handleAddToCart}
         handleDeleteFromCart={handleDeleteFromCart}
+        searchInputValue={searchInputValue}
+        setSearchInputValue={setSearchInputValue}
       />
     </div>
   );

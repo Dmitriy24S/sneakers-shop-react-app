@@ -1,11 +1,21 @@
 import Card from "../Card";
 import "./Main.scss";
 
-const Main = ({ items, handleAddToCart, handleDeleteFromCart }: any) => {
+const Main = ({
+  items,
+  handleAddToCart,
+  handleDeleteFromCart,
+  searchInputValue,
+  setSearchInputValue,
+}: any) => {
   return (
     <main>
       <div className="top-container">
-        <h1 className="section-title">All sneakers</h1>
+        <h1 className="section-title">
+          {searchInputValue
+            ? `Search result for: ${searchInputValue}`
+            : "All sneakers"}
+        </h1>
         <div className="search-container">
           <label htmlFor="search">
             <img
@@ -21,6 +31,8 @@ const Main = ({ items, handleAddToCart, handleDeleteFromCart }: any) => {
             name="search"
             id="search"
             className="search-items-input"
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
           />
         </div>
       </div>

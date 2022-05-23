@@ -12,19 +12,24 @@
 
 .drawer-content {
   scrollbar-gutter: stable;
-  overflow: auto;
+  // overflow: auto;
+  overflow: overlay; // better for padding/spacing of drawer?
   position: fixed;
   background-color: white;
   box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
   right: 0;
   top: 0;
   bottom: 0;
-  width: 385px;
+  width: 310px;
   height: 100%;
-  padding: 1.5rem;
+  padding: 1rem;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  @media (min-width: 400px) {
+    width: 385px;
+    padding: 1.5rem;
+  }
 }
 
 .drawer-top {
@@ -52,7 +57,10 @@
   overflow: hidden;
   transition: box-shadow 150ms ease-in-out;
   .item__image {
-    width: 92px;
+    width: 75px;
+    @media (min-width: 400px) {
+      width: 92px;
+    }
   }
   .cart-item__info {
     display: flex;
@@ -104,11 +112,15 @@
 }
 
 .close-cart-btn {
+  margin-right: -1rem;
   rect {
     stroke: none;
   }
   &:hover {
     box-shadow: none;
+    path {
+      fill: hsl(0deg 0% 39%);
+    }
   }
 }
 
@@ -153,8 +165,7 @@
       transition: transform 150ms ease-in-out;
     }
     &:hover {
-      // transform: translateY(-2px);
-      // on hover move btn up
+      // transform: translateY(-2px); // on hover move btn up
       background-color: lighten(hsl(87, 60%, 59%), 3%);
       .place-order-btn-arrow {
         transform: translateX(7px);

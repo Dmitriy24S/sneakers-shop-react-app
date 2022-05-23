@@ -1,8 +1,11 @@
 // Container
 .slider-container {
   height: 16rem;
-  padding: 0 4rem;
   margin-top: 2rem;
+  padding: 0 1rem;
+  @media (min-width: 600px) {
+    padding: 0 4rem;
+  }
 }
 
 .obj-center {

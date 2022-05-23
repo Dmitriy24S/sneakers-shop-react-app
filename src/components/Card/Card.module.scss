@@ -65,6 +65,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: auto; // move price section to bottom of card - for unified look, indepednent of product name length/size
   }
   @media (hover) {
     &:hover {
