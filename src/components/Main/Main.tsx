@@ -1,19 +1,47 @@
+import { useEffect, useState } from "react";
+import debounce from "lodash.debounce";
 import Card from "../Card";
 import "./Main.scss";
 
 const Main = ({
   items,
   handleAddToCart,
-  handleDeleteFromCart,
   searchInputValue,
   setSearchInputValue,
 }: any) => {
+  const [searchedItems, setSearchedItems] = useState(items);
+
+  const handleSearch = (text: string) => {
+    // if no input text, show all
+    if (!text) {
+      setSearchedItems(items);
+      return;
+    }
+    // filter shown items
+    setSearchedItems(
+      items.filter((item: any) =>
+        item.title.toLowerCase().includes(text.toLowerCase())
+      )
+    );
+  };
+
+  const debouncedSearch = debounce((value) => {
+    setSearchInputValue(value);
+    console.log("====>", value);
+    handleSearch(value);
+  }, 400);
+
+  // On load create fitlered data array, map over it to show search results when it updates
+  useEffect(() => {
+    setSearchedItems(items);
+  }, [items]);
+
   return (
     <main>
       <div className="top-container">
         <h1 className="section-title">
           {searchInputValue
-            ? `Search result for: ${searchInputValue}`
+            ? `Search result for: ${searchInputValue} (${searchedItems.length})`
             : "All sneakers"}
         </h1>
         <div className="search-container">
@@ -31,26 +59,23 @@ const Main = ({
             name="search"
             id="search"
             className="search-items-input"
-            value={searchInputValue}
-            onChange={(e) => setSearchInputValue(e.target.value)}
+            // value={searchInputValue}
+            onChange={(e) => {
+              debouncedSearch(e.target.value);
+            }}
           />
         </div>
       </div>
 
       <section className="items-container">
-        {items.length === 0 && (
+        {searchedItems.length === 0 && (
           <article className="empty-data-message">
             <h2>No data to display</h2>
           </article>
         )}
-        {items?.map((item: any, index: number) => {
+        {searchedItems?.map((item: any) => {
           return (
-            <Card
-              key={index}
-              item={item}
-              handleAddToCart={handleAddToCart}
-              handleDeleteFromCart={handleDeleteFromCart}
-            />
+            <Card key={item.id} item={item} handleAddToCart={handleAddToCart} />
           );
         })}
       </section>
