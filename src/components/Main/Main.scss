@@ -19,7 +19,7 @@ main {
   }
   .section-title {
     margin-top: 2rem;
-    max-width: 22rem;
+    max-width: 30rem;
     align-self: flex-start;
     overflow: hidden;
     min-width: 100%;
@@ -74,4 +74,5 @@ main {
   text-align: center;
   margin-top: 6rem;
   color: hsl(0, 0%, 50%);
+  margin: 0 auto;
 }

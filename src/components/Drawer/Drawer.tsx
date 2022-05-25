@@ -4,13 +4,13 @@ import "./Drawer.scss";
 type DrawerProps = {
   setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   cartItems: any;
-  handleDeleteFromCart: any;
+  handleDeleteFromCartDrawer: any;
 };
 
 const Drawer = ({
   setIsCartDrawerOpen,
   cartItems,
-  handleDeleteFromCart,
+  handleDeleteFromCartDrawer,
 }: DrawerProps) => {
   return (
     <section className="drawer">
@@ -56,7 +56,7 @@ const Drawer = ({
             <section className="cart-content">
               {cartItems.map((item: any, index: number) => {
                 return (
-                  <article className="cart-item">
+                  <article key={item.id} className="cart-item">
                     {/* info */}
                     <img
                       src={`${process.env.PUBLIC_URL}${item.imageUrl}`}
@@ -75,7 +75,7 @@ const Drawer = ({
                     <button
                       aria-label="remove from cart"
                       className="remove-cart-btn"
-                      onClick={() => handleDeleteFromCart(item.id)}
+                      onClick={() => handleDeleteFromCartDrawer(item.id)}
                     >
                       <svg
                         width="32"
