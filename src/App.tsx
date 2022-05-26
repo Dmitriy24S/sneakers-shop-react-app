@@ -48,7 +48,7 @@ function App() {
     }
   };
 
-  const handleDeleteFromCartDrawer = (id: any) => {
+  const handleDeleteFromCartDrawer = (id: string) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
     setCartItems(updatedCart);
     axios.delete(`https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart/${id}`);
@@ -142,6 +142,18 @@ function App() {
     }
   }, [isCartDrawerOpen]);
 
+  const checkFavoriteStatusInMain = (id: string) => {
+    return favorites.some(
+      (favorite: any) => Number(favorite.storeId) === Number(id)
+    );
+  };
+
+  const checkFavoriteStatusInFavorites = (id: string) => {
+    return favorites.some(
+      (favorite: any) => Number(favorite.id) === Number(id)
+    );
+  };
+
   return (
     <div className="App">
       <Header setIsCartDrawerOpen={setIsCartDrawerOpen} />
@@ -163,6 +175,7 @@ function App() {
               searchInputValue={searchInputValue}
               setSearchInputValue={setSearchInputValue}
               Slider={<Slider />}
+              checkFavoriteStatus={checkFavoriteStatusInMain}
             >
               <Slider />
             </Main>
@@ -178,6 +191,7 @@ function App() {
                 handleDeleteFavoriteFromFavoritePage
               }
               setFavorites={setFavorites}
+              checkFavoriteStatus={checkFavoriteStatusInFavorites}
             />
           }
         ></Route>

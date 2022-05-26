@@ -7,6 +7,7 @@ const Favorites = ({
   handleAddToCart,
   favorites,
   setFavorites,
+  checkFavoriteStatus,
 }: any) => {
   // Get / update favorites from backend when open favorites
   useEffect(() => {
@@ -39,6 +40,7 @@ const Favorites = ({
                 handleAddToCart={handleAddToCart}
                 handleAddToFavorites={handleDeleteFavoriteFromFavoritePage}
                 favorited={true}
+                checkFavoriteStatus={checkFavoriteStatus}
               />
             );
           })}

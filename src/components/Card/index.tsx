@@ -5,23 +5,20 @@ const Card = ({
   item,
   handleAddToCart,
   handleAddToFavorites,
-  favorited = false,
+  checkFavoriteStatus,
 }: any) => {
   const [isItemInCart, setIsItemInCart] = useState<boolean>(false);
-  const [favoriteStatus, setFavoriteStatus] = useState(favorited);
 
   return (
     <article className={s.itemCard}>
-      {favoriteStatus ? (
+      {/* If item is favorited show active button */}
+      {checkFavoriteStatus(item.id) ? (
         <>
           {/* remove from favorite btn */}
           <button
             aria-label="remove from favorites"
             className={s.removeFromFavoritesBtn}
-            onClick={() => {
-              setFavoriteStatus(!favoriteStatus);
-              handleAddToFavorites(item);
-            }}
+            onClick={() => handleAddToFavorites(item)}
           >
             <svg
               width="32"
@@ -57,10 +54,7 @@ const Card = ({
           <button
             aria-label="add to favorites"
             className={s.addToFavoritesBtn}
-            onClick={() => {
-              setFavoriteStatus(!favoriteStatus);
-              handleAddToFavorites(item);
-            }}
+            onClick={() => handleAddToFavorites(item)}
           >
             <svg
               width="32"

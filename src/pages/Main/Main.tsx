@@ -10,6 +10,7 @@ const Main = ({
   setSearchInputValue,
   handleAddToFavorites,
   Slider,
+  checkFavoriteStatus,
 }: any) => {
   const [searchedItems, setSearchedItems] = useState(items);
 
@@ -87,6 +88,7 @@ const Main = ({
                 item={item}
                 handleAddToCart={handleAddToCart}
                 handleAddToFavorites={handleAddToFavorites}
+                checkFavoriteStatus={checkFavoriteStatus}
               />
             );
           })}
