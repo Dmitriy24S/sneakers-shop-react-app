@@ -72,7 +72,8 @@
           fill: hsl(0, 0%, 41%);
         }
       }
-      .favorite-btn {
+      .favorite-link {
+        display: flex;
         path {
           transition: all 150ms ease-in-out;
         }

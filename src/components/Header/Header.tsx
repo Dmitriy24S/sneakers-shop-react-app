@@ -1,4 +1,5 @@
 import "./Header.scss";
+import { Link } from "react-router-dom";
 
 type HeaderProps = {
   setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -7,19 +8,22 @@ type HeaderProps = {
 const Header = ({ setIsCartDrawerOpen }: HeaderProps) => {
   return (
     <header className="header">
-      <div className="header__left-container">
-        <img
-          width={40}
-          height={40}
-          src={`${process.env.PUBLIC_URL}/img/logo.png`}
-          alt="Logo"
-          className="header__logo"
-        />
-        <div className="header__name">
-          <h3>Sneakers Store</h3>
-          <p>All best sneakers</p>
+      <Link to="/">
+        <div className="header__left-container">
+          <img
+            width={40}
+            height={40}
+            src={`${process.env.PUBLIC_URL}/img/logo.png`}
+            alt="Logo"
+            className="header__logo"
+          />
+          <div className="header__name">
+            <h3>Sneakers Store</h3>
+            <p>All best sneakers</p>
+          </div>
         </div>
-      </div>
+      </Link>
+
       <div className="header__right-container">
         <ul>
           <li>
@@ -62,10 +66,14 @@ const Header = ({ setIsCartDrawerOpen }: HeaderProps) => {
             </button>
           </li>
           <li>
-            <button aria-label="open favorites" className="favorite-btn">
-              {/* favorites btn */}
+            <Link
+              to="/favorites"
+              aria-label="open favorites"
+              className="favorite-link"
+            >
+              {/* favorites btn/link */}
               <svg
-                width="22"
+                width="20"
                 height="19"
                 viewBox="0 0 22 19"
                 fill="none"
@@ -76,7 +84,7 @@ const Header = ({ setIsCartDrawerOpen }: HeaderProps) => {
                   fill="#9B9B9B"
                 />
               </svg>
-            </button>
+            </Link>
           </li>
           <li>
             <button aria-label="open profile" className="profile-btn">
