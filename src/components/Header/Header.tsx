@@ -1,14 +1,16 @@
 import "./Header.scss";
 import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
 
-type HeaderProps = {
-  setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+// setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
-const Header = ({ setIsCartDrawerOpen }: HeaderProps) => {
+const Header = () => {
+  const { setIsCartDrawerOpen } = useContext<any>(AppContext);
+
   return (
     <header className="header">
-      <Link to="/">
+      <Link to="/sneakers-shop-react-app/">
         <div className="header__left-container">
           <img
             width={40}
@@ -67,7 +69,7 @@ const Header = ({ setIsCartDrawerOpen }: HeaderProps) => {
           </li>
           <li>
             <Link
-              to="/favorites"
+              to="/sneakers-shop-react-app/favorites"
               aria-label="open favorites"
               className="favorite-link"
             >

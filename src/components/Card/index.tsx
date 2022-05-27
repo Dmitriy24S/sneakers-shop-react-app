@@ -1,4 +1,3 @@
-import { useState } from "react";
 import s from "./Card.module.scss";
 
 const Card = ({
@@ -6,9 +5,9 @@ const Card = ({
   handleAddToCart,
   handleAddToFavorites,
   checkFavoriteStatus,
+  checkInCartStatus,
+  location,
 }: any) => {
-  const [isItemInCart, setIsItemInCart] = useState<boolean>(false);
-
   return (
     <article className={s.itemCard}>
       {/* If item is favorited show active button */}
@@ -98,15 +97,12 @@ const Card = ({
           <b>£{item.price}</b>
         </div>
         {/* added item / remove */}
-        {isItemInCart ? (
+        {checkInCartStatus(item, location) ? (
           <button
             // remove from cart style btn
             aria-label="remove from cart"
             className={s.removeItemFromCartBtn}
-            onClick={() => {
-              handleAddToCart(item);
-              setIsItemInCart(!isItemInCart);
-            }}
+            onClick={() => handleAddToCart(item)}
           >
             <svg
               width="32"
@@ -184,10 +180,7 @@ const Card = ({
             // add to cart style btn
             aria-label="add to cart"
             className={s.addItemToCartBtn}
-            onClick={() => {
-              handleAddToCart(item);
-              setIsItemInCart(!isItemInCart);
-            }}
+            onClick={() => handleAddToCart(item)}
           >
             <svg
               width="12"

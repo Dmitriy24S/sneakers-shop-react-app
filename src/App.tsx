@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Drawer from "./components/Drawer/Drawer";
 import Header from "./components/Header/Header";
 import Slider from "./components/Slider/Slider";
 import Main from "./pages/Main/Main";
 import Favorites from "./pages/Favorites/Favorites";
+
+export const AppContext = createContext({});
 
 function App() {
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState<boolean>(false);
@@ -128,7 +130,7 @@ function App() {
     axios
       .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites")
       .then((res) => {
-        setCartItems(res.data);
+        setFavorites(res.data);
       });
   }, []);
 
@@ -154,49 +156,65 @@ function App() {
     );
   };
 
+  // const checkInCartStatus = (id: string, location: string) => {
+  const checkInCartStatus = (obj: any, location: string) => {
+    // in main page check
+    if (location === "main") {
+      return cartItems.some(
+        (item: any) => Number(item.storeId) === Number(obj.id)
+      );
+    } else {
+      // in favorite check
+      return cartItems.some(
+        (item: any) => Number(item.storeId) === Number(obj.storeId)
+      );
+    }
+  };
+
   return (
-    <div className="App">
-      <Header setIsCartDrawerOpen={setIsCartDrawerOpen} />
-      {isCartDrawerOpen && (
-        <Drawer
-          setIsCartDrawerOpen={setIsCartDrawerOpen}
-          cartItems={cartItems}
-          handleDeleteFromCartDrawer={handleDeleteFromCartDrawer}
-        />
-      )}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Main
-              items={items}
-              handleAddToCart={handleAddToCart}
-              handleAddToFavorites={handleAddToFavorites}
-              searchInputValue={searchInputValue}
-              setSearchInputValue={setSearchInputValue}
-              Slider={<Slider />}
-              checkFavoriteStatus={checkFavoriteStatusInMain}
-            >
-              <Slider />
-            </Main>
-          }
-        ></Route>
-        <Route
-          path="/favorites"
-          element={
-            <Favorites
-              favorites={favorites}
-              handleAddToFavorites={handleAddToFavorites}
-              handleDeleteFavoriteFromFavoritePage={
-                handleDeleteFavoriteFromFavoritePage
-              }
-              setFavorites={setFavorites}
-              checkFavoriteStatus={checkFavoriteStatusInFavorites}
-            />
-          }
-        ></Route>
-      </Routes>
-    </div>
+    <AppContext.Provider
+      value={{
+        setIsCartDrawerOpen,
+        items,
+        favorites,
+        cartItems,
+        handleAddToCart,
+        checkInCartStatus,
+      }}
+    >
+      <div className="App">
+        <Header />
+        {isCartDrawerOpen && (
+          <Drawer handleDeleteFromCartDrawer={handleDeleteFromCartDrawer} />
+        )}
+        <Routes>
+          <Route
+            path="/sneakers-shop-react-app/"
+            element={
+              <Main
+                handleAddToCart={handleAddToCart}
+                handleAddToFavorites={handleAddToFavorites}
+                searchInputValue={searchInputValue}
+                setSearchInputValue={setSearchInputValue}
+                checkFavoriteStatus={checkFavoriteStatusInMain}
+                Slider={<Slider />}
+              />
+            }
+          ></Route>
+          <Route
+            path="/sneakers-shop-react-app/favorites"
+            element={
+              <Favorites
+                handleDeleteFavoriteFromFavoritePage={
+                  handleDeleteFavoriteFromFavoritePage
+                }
+                checkFavoriteStatus={checkFavoriteStatusInFavorites}
+              />
+            }
+          ></Route>
+        </Routes>
+      </div>
+    </AppContext.Provider>
   );
 }
 

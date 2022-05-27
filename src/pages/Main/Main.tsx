@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../App";
 import debounce from "lodash.debounce";
 import Card from "../../components/Card";
 import "./Main.scss";
 
 const Main = ({
-  items,
   handleAddToCart,
   searchInputValue,
   setSearchInputValue,
@@ -12,6 +12,7 @@ const Main = ({
   Slider,
   checkFavoriteStatus,
 }: any) => {
+  const { items, checkInCartStatus } = useContext<any>(AppContext);
   const [searchedItems, setSearchedItems] = useState(items);
 
   const handleSearch = (text: string) => {
@@ -89,6 +90,8 @@ const Main = ({
                 handleAddToCart={handleAddToCart}
                 handleAddToFavorites={handleAddToFavorites}
                 checkFavoriteStatus={checkFavoriteStatus}
+                checkInCartStatus={checkInCartStatus}
+                location={"main"}
               />
             );
           })}

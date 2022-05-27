@@ -1,22 +1,24 @@
-import axios from "axios";
-import { useEffect } from "react";
+// import axios from "axios";
+// import { useEffect } from "react";
+import { useContext } from "react";
+import { AppContext } from "../../App";
 import Card from "../../components/Card";
 
 const Favorites = ({
   handleDeleteFavoriteFromFavoritePage,
-  handleAddToCart,
-  favorites,
-  setFavorites,
   checkFavoriteStatus,
 }: any) => {
   // Get / update favorites from backend when open favorites
-  useEffect(() => {
-    axios
-      .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites")
-      .then((res) => {
-        setFavorites(res.data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites")
+  //     .then((res) => {
+  //       setFavorites(res.data);
+  //     });
+  // }, []);
+
+  const { favorites, handleAddToCart, checkInCartStatus } =
+    useContext<any>(AppContext);
 
   return (
     <main>
@@ -39,8 +41,9 @@ const Favorites = ({
                 item={item}
                 handleAddToCart={handleAddToCart}
                 handleAddToFavorites={handleDeleteFavoriteFromFavoritePage}
-                favorited={true}
                 checkFavoriteStatus={checkFavoriteStatus}
+                checkInCartStatus={checkInCartStatus}
+                location={"favorites"}
               />
             );
           })}

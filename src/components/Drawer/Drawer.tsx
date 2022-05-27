@@ -1,17 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
 import "./Drawer.scss";
 
+// setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 type DrawerProps = {
-  setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  cartItems: any;
   handleDeleteFromCartDrawer: any;
 };
 
-const Drawer = ({
-  setIsCartDrawerOpen,
-  cartItems,
-  handleDeleteFromCartDrawer,
-}: DrawerProps) => {
+const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
+  const { setIsCartDrawerOpen, cartItems } = useContext<any>(AppContext);
+
   return (
     <section className="drawer">
       <div
@@ -54,7 +52,7 @@ const Drawer = ({
         {cartItems.length ? (
           <>
             <section className="cart-content">
-              {cartItems.map((item: any, index: number) => {
+              {cartItems.map((item: any) => {
                 return (
                   <article key={item.id} className="cart-item">
                     {/* info */}
