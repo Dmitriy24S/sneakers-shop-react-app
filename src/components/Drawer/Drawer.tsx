@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../../App";
+import StatusMessage from "../StatusMessage/StatusMessage";
 import "./Drawer.scss";
 
 // setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -7,8 +9,41 @@ type DrawerProps = {
   handleDeleteFromCartDrawer: any;
 };
 
+const delay = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
-  const { setIsCartDrawerOpen, cartItems } = useContext<any>(AppContext);
+  const { setIsCartDrawerOpen, cartItems, setCartItems } =
+    useContext<any>(AppContext);
+  const [isProcessingOrder, setIsProcessingOrder] = useState(false); // disable submit button while processing
+  const [isOrderComplete, setIsOrderComplete] = useState(false); // shows order info status message component
+  const [orderId, setOrderId] = useState(null);
+
+  const handleSubmitOrder = async () => {
+    try {
+      setIsProcessingOrder(true);
+      // create order info in the backend
+      const { data } = await axios.post(
+        "https://628a5b65e5e5a9ad3223b0a7.mockapi.io/orders",
+        { order: cartItems }
+      );
+      setOrderId(data.id);
+
+      // delete items from cart in backend after have created the order in the backend
+      for (let i = 0; i < cartItems.length; i++) {
+        const item = cartItems[i];
+        await axios.delete(
+          "https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart/" + item.id
+        );
+        await delay(1000);
+      }
+      setIsOrderComplete(true);
+      setCartItems([]);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to complete order");
+    }
+    setIsProcessingOrder(false); // ? finished the attempt at processing order, no longer processing order
+  };
 
   return (
     <section className="drawer">
@@ -48,8 +83,8 @@ const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
             </svg>
           </button>
         </div>
-        {/* cart content list */}
-        {cartItems.length ? (
+        {/* Cart content list */}
+        {cartItems.length > 0 ? (
           <>
             <section className="cart-content">
               {cartItems.map((item: any) => {
@@ -107,8 +142,13 @@ const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
                 Total: <div className="cart-total-divider"></div>
                 <span className="cart-total-price">£199.99</span>
               </div>
-              <button className="place-order-btn">
-                Place order
+              <button
+                className="place-order-btn"
+                onClick={handleSubmitOrder}
+                disabled={isProcessingOrder}
+              >
+                {/* Place order */}
+                {isProcessingOrder ? "Processing order" : " Place order"}
                 {/* order btn - arrow svg */}
                 <svg
                   className="place-order-btn-arrow"
@@ -137,9 +177,49 @@ const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
             </section>
           </>
         ) : (
-          <article className="empty-cart-message">
-            <h2>Cart is empty</h2>
-          </article>
+          // Empty cart message / Order complete message
+          <StatusMessage
+            title={isOrderComplete ? "Order complete" : "Your cart is empty"}
+            description={
+              isOrderComplete
+                ? `Your order #${orderId} has been created`
+                : "Please add products to continue"
+            }
+            image={
+              isOrderComplete ? "img/complete-order.jpg" : "img/empty-cart.jpg"
+            }
+          >
+            <button
+              aria-label="close cart drawer"
+              className="return-btn"
+              onClick={() => setIsCartDrawerOpen(false)}
+            >
+              <svg
+                width="16"
+                height="14"
+                viewBox="0 0 16 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="return-arrow"
+              >
+                <path
+                  d="M1 7H14.7143"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8.71436 1L14.7144 7L8.71436 13"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Return
+            </button>
+          </StatusMessage>
         )}
       </div>
     </section>

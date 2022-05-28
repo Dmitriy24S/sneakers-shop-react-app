@@ -178,6 +178,7 @@ function App() {
         items,
         favorites,
         cartItems,
+        setCartItems,
         handleAddToCart,
         checkInCartStatus,
       }}
