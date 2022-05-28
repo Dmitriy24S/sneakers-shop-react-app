@@ -1,4 +1,5 @@
 import s from "./Card.module.scss";
+import ContentLoader from "react-content-loader";
 
 const Card = ({
   item,
@@ -7,8 +8,28 @@ const Card = ({
   checkFavoriteStatus,
   checkInCartStatus,
   location,
+  isLoadingItems,
 }: any) => {
-  return (
+  // if items not loaded use placeholder skeleton */}
+  return isLoadingItems ? (
+    <ContentLoader
+      speed={2}
+      width={210}
+      height={325}
+      viewBox="0 0 210 325"
+      backgroundColor="#f0f0f0"
+      foregroundColor="#ededed"
+    >
+      <rect x="13" y="276" rx="3" ry="3" width="53" height="6" />
+      <rect x="13" y="292" rx="3" ry="3" width="35" height="6" />
+      <rect x="9" y="188" rx="3" ry="3" width="117" height="6" />
+      <rect x="9" y="204" rx="3" ry="3" width="106" height="6" />
+      <rect x="9" y="220" rx="3" ry="3" width="70" height="6" />
+      <rect x="14" y="30" rx="0" ry="0" width="160" height="134" />
+      <rect x="136" y="268" rx="6" ry="6" width="30" height="30" />
+      <rect x="139" y="283" rx="0" ry="0" width="0" height="2" />
+    </ContentLoader>
+  ) : (
     <article className={s.itemCard}>
       {/* If item is favorited show active button */}
       {checkFavoriteStatus(item.id) ? (

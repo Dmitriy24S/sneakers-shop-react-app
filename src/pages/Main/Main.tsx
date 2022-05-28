@@ -12,7 +12,8 @@ const Main = ({
   Slider,
   checkFavoriteStatus,
 }: any) => {
-  const { items, checkInCartStatus } = useContext<any>(AppContext);
+  const { items, checkInCartStatus, isLoadingItems } =
+    useContext<any>(AppContext);
   const [searchedItems, setSearchedItems] = useState(items);
 
   const handleSearch = (text: string) => {
@@ -77,24 +78,21 @@ const Main = ({
 
         {/* Products list */}
         <section className="items-container">
-          {searchedItems.length === 0 && (
-            <article className="empty-data-message">
-              <h2>No data to display</h2>
-            </article>
-          )}
-          {searchedItems?.map((item: any) => {
-            return (
+          {/* if items not loaded use placeholder array for skeleton */}
+          {(isLoadingItems ? [...Array(7)] : searchedItems).map(
+            (item: any, index: number) => (
               <Card
-                key={item.id}
+                key={item ? item.id : index}
                 item={item}
                 handleAddToCart={handleAddToCart}
                 handleAddToFavorites={handleAddToFavorites}
                 checkFavoriteStatus={checkFavoriteStatus}
                 checkInCartStatus={checkInCartStatus}
                 location={"main"}
+                isLoadingItems={isLoadingItems}
               />
-            );
-          })}
+            )
+          )}
         </section>
       </div>
     </main>

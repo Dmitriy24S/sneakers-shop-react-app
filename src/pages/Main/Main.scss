@@ -69,7 +69,8 @@ main {
   margin-top: 2rem;
   padding-bottom: 4rem;
   @media (min-width: 600px) {
-    justify-content: start;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 210px);
   }
 }
 

@@ -15,6 +15,7 @@ function App() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [favorites, setFavorites] = useState<any[]>([]);
+  const [isLoadingItems, setisLoadingItems] = useState(true);
 
   // Get / update cart info when open cart drawer
   useEffect(() => {
@@ -112,26 +113,42 @@ function App() {
     //   });
 
     // Axios
-    // all items fetch
-    axios
-      .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/items")
-      .then((res) => {
-        // console.log(res.data, "items data");
-        setItems(res.data);
-      });
-    // cart fetch
-    axios
-      .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart")
-      .then((res) => {
-        // console.log(res.data, "cart data");
-        setCartItems(res.data);
-      });
-    // favorites fetch
-    axios
-      .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites")
-      .then((res) => {
-        setFavorites(res.data);
-      });
+    try {
+      // all items fetch
+      axios
+        .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/items")
+        .then((res) => {
+          setItems(res.data);
+          setisLoadingItems(false);
+        })
+        .catch((error) => {
+          alert("error fetching items");
+          console.log(error, "error fetching items");
+        });
+      // cart fetch
+      axios
+        .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart")
+        .then((res) => {
+          setCartItems(res.data);
+        })
+        .catch((error) => {
+          alert("error fetching cart");
+          console.log(error, "error fetching cart");
+        });
+      // favorites fetch
+      axios
+        .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites")
+        .then((res) => {
+          setFavorites(res.data);
+        })
+        .catch((error) => {
+          alert("error fetching favorites");
+          console.log(error, "error fetching favorites");
+        });
+    } catch (error) {
+      alert("Failed to load items");
+      console.log(error);
+    }
   }, []);
 
   // Disable main page scroll when cart drawer is open
@@ -181,6 +198,8 @@ function App() {
         setCartItems,
         handleAddToCart,
         checkInCartStatus,
+        isLoadingItems,
+        setisLoadingItems,
       }}
     >
       <div className="App">
