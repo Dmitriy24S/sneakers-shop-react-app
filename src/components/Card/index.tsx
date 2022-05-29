@@ -123,7 +123,7 @@ const Card = ({
             // remove from cart style btn
             aria-label="remove from cart"
             className={s.removeItemFromCartBtn}
-            onClick={() => handleAddToCart(item)}
+            onClick={() => handleAddToCart(item, location)}
           >
             <svg
               width="32"
@@ -201,7 +201,7 @@ const Card = ({
             // add to cart style btn
             aria-label="add to cart"
             className={s.addItemToCartBtn}
-            onClick={() => handleAddToCart(item)}
+            onClick={() => handleAddToCart(item, location)}
           >
             <svg
               width="12"

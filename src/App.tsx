@@ -18,36 +18,94 @@ function App() {
   const [isLoadingItems, setisLoadingItems] = useState(true);
 
   // Get / update cart info when open cart drawer
-  useEffect(() => {
-    axios
-      .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart")
-      .then((res) => {
-        setCartItems(res.data);
-      });
-  }, [isCartDrawerOpen]);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart")
+  //     .then((res) => {
+  //       setCartItems(res.data);
+  //     });
+  // }, [isCartDrawerOpen]);
 
-  const handleAddToCart = async (item: any) => {
-    try {
-      // In main click on add to cart btn -> check cart for matching item / check if in cart already
-      const findItem = cartItems.find(
-        (cartItem) => Number(item.id) === Number(cartItem.storeId)
-      );
-      if (findItem) {
-        // If item already in cart remove it from cart / Undo add to cart
-        setCartItems(
-          cartItems.filter((cartItem) => cartItem.storeId !== item.id)
+  const handleAddToCart = async (item: any, location: string) => {
+    // If toggle to cart button on  main page
+    if (location === "main") {
+      try {
+        // Main - if click on add to cart btn -> check cart for matching item / check if in cart already
+        const findItem = cartItems.find(
+          (cartItem) => Number(item.id) === Number(cartItem.storeId)
         );
-        axios.delete(
-          `https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart/${findItem.id}`
-        );
-      } else {
-        // Add new item to cart
-        setCartItems([...cartItems, item]);
-        axios.post("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart", item);
+        if (findItem) {
+          // If item already in cart remove it from cart / Undo add to cart
+          setCartItems(
+            cartItems.filter((cartItem) => cartItem.storeId !== item.id)
+          );
+          axios.delete(
+            `https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart/${findItem.id}`
+          );
+        } else {
+          // Add new item to cart
+          setCartItems([...cartItems, item]);
+          // axios.post("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart", item);
+          const { data } = await axios.post(
+            "https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart",
+            item
+          );
+          // give up-to-date id? mockAPI quirk?
+          setCartItems((prev) =>
+            prev.map((cartItem) => {
+              if (cartItem.id === data.storeId) {
+                return {
+                  ...cartItem,
+                  id: data.id,
+                };
+              }
+              return cartItem;
+            })
+          );
+        }
+      } catch (error) {
+        console.log("error when adding to cart");
+        console.error(error);
       }
-    } catch (error) {
-      console.log("error when adding to cart");
-      console.error(error);
+      // Favorites -  if toggle button in favorites page (different ids id/storeId - mockapi id quirk/nuance)
+    } else {
+      try {
+        // In favorites click on add to cart btn -> check cart for matching item / check if in cart already
+        const findItem = cartItems.find(
+          (cartItem) => Number(item.storeId) === Number(cartItem.storeId)
+        );
+        if (findItem) {
+          // If item already in cart remove it from cart / Undo add to cart
+          setCartItems(
+            cartItems.filter((cartItem) => cartItem.storeId !== item.storeId)
+          );
+          axios.delete(
+            `https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart/${findItem.id}`
+          );
+        } else {
+          // Add new item to cart
+          setCartItems([...cartItems, item]);
+          const { data } = await axios.post(
+            "https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart",
+            item
+          );
+          // give up-to-date id? mockAPI quirk?
+          setCartItems((prev) =>
+            prev.map((item) => {
+              if (item.storeId === data.storeId) {
+                return {
+                  ...item,
+                  id: data.id,
+                };
+              }
+              return item;
+            })
+          );
+        }
+      } catch (error) {
+        console.log("error when adding to cart");
+        console.error(error);
+      }
     }
   };
 
@@ -113,42 +171,57 @@ function App() {
     //   });
 
     // Axios
-    try {
-      // all items fetch
-      axios
-        .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/items")
-        .then((res) => {
-          setItems(res.data);
-          setisLoadingItems(false);
-        })
-        .catch((error) => {
-          alert("error fetching items");
-          console.log(error, "error fetching items");
-        });
-      // cart fetch
-      axios
-        .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart")
-        .then((res) => {
-          setCartItems(res.data);
-        })
-        .catch((error) => {
-          alert("error fetching cart");
-          console.log(error, "error fetching cart");
-        });
-      // favorites fetch
-      axios
-        .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites")
-        .then((res) => {
-          setFavorites(res.data);
-        })
-        .catch((error) => {
-          alert("error fetching favorites");
-          console.log(error, "error fetching favorites");
-        });
-    } catch (error) {
-      alert("Failed to load items");
-      console.log(error);
-    }
+    // try {
+    // all items fetch
+    // axios
+    //   .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/items")
+    //   .then((res) => {
+    //     setItems(res.data);
+    //     setisLoadingItems(false);
+    //   })
+    //   .catch((error) => {
+    //     alert("error fetching items");
+    //     console.log(error, "error fetching items");
+    //   });
+    // cart fetch
+    // axios
+    //   .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart")
+    //   .then((res) => {
+    //     setCartItems(res.data);
+    //   })
+    //   .catch((error) => {
+    //     alert("error fetching cart");
+    //     console.log(error, "error fetching cart");
+    //   });
+    // favorites fetch
+    // axios
+    //   .get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites")
+    //   .then((res) => {
+    //     setFavorites(res.data);
+    //   })
+    //   .catch((error) => {
+    //     alert("error fetching favorites");
+    //     console.log(error, "error fetching favorites";
+    //   });
+
+    const fetchAllData = async () => {
+      try {
+        const [cartResponse, favoritesResponse, itemsResponse] =
+          await Promise.all([
+            axios.get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart"),
+            axios.get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites"),
+            axios.get("https://628a5b65e5e5a9ad3223b0a7.mockapi.io/items"),
+          ]);
+        setFavorites(favoritesResponse.data);
+        setCartItems(cartResponse.data);
+        setItems(itemsResponse.data);
+        setisLoadingItems(false);
+      } catch (error) {
+        alert("Failed to load items");
+        console.log(error);
+      }
+    };
+    fetchAllData();
   }, []);
 
   // Disable main page scroll when cart drawer is open
