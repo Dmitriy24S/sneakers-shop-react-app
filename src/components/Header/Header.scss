@@ -64,14 +64,7 @@
           }
         }
       }
-      .profile-btn {
-        path {
-          transition: all 150ms ease-in-out;
-        }
-        &:hover path {
-          fill: hsl(0, 0%, 41%);
-        }
-      }
+      .profile-btn,
       .favorite-link {
         display: flex;
         path {

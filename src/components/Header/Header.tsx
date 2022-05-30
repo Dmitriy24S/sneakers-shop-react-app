@@ -89,7 +89,12 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <button aria-label="open profile" className="profile-btn">
+            <Link
+              to="/sneakers-shop-react-app/orders"
+              aria-label="open account orders"
+              className="profile-btn"
+            >
+              {/* <button aria-label="open profile and orders" className="profile-btn"> */}
               {/* Profile btn */}
               <svg
                 width="20"
@@ -105,7 +110,8 @@ const Header = () => {
                   fill="#9B9B9B"
                 />
               </svg>
-            </button>
+              {/* </button> */}
+            </Link>
           </li>
         </ul>
       </div>

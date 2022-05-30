@@ -27,7 +27,6 @@ const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
         { order: cartItems }
       );
       setOrderId(data.id);
-
       // delete items from cart in backend after have created the order in the backend
       for (let i = 0; i < cartItems.length; i++) {
         const item = cartItems[i];

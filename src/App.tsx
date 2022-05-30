@@ -6,6 +6,7 @@ import Header from "./components/Header/Header";
 import Slider from "./components/Slider/Slider";
 import Main from "./pages/Main/Main";
 import Favorites from "./pages/Favorites/Favorites";
+import Orders from "./pages/Orders/Orders";
 
 export const AppContext = createContext({});
 
@@ -304,6 +305,10 @@ function App() {
                 checkFavoriteStatus={checkFavoriteStatusInFavorites}
               />
             }
+          ></Route>
+          <Route
+            path="/sneakers-shop-react-app/orders"
+            element={<Orders />}
           ></Route>
         </Routes>
       </div>
