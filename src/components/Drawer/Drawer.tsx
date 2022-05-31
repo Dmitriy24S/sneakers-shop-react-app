@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../App";
+import { useCart } from "../../hooks/useCart";
 import StatusMessage from "../StatusMessage/StatusMessage";
 import "./Drawer.scss";
 
@@ -21,6 +22,7 @@ const Drawer = () => {
   const [isProcessingOrder, setIsProcessingOrder] = useState(false); // disable submit button while processing
   const [isOrderComplete, setIsOrderComplete] = useState(false); // shows order info status message component
   const [orderId, setOrderId] = useState(null);
+  const { totalCartPrice } = useCart();
 
   const handleSubmitOrder = async () => {
     try {
@@ -187,7 +189,7 @@ const Drawer = () => {
             <section className="cart-bottom">
               <div className="cart-total">
                 Total: <div className="cart-total-divider"></div>
-                <span className="cart-total-price">£199.99</span>
+                <span className="cart-total-price">£{totalCartPrice}</span>
               </div>
               <button
                 className="place-order-btn"
