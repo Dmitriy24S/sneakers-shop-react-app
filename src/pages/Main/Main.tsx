@@ -5,14 +5,13 @@ import Card from "../../components/Card";
 import "./Main.scss";
 
 const Main = ({
-  handleAddToCart,
   searchInputValue,
   setSearchInputValue,
   handleAddToFavorites,
   Slider,
   checkFavoriteStatus,
 }: any) => {
-  const { items, checkInCartStatus, isLoadingItems } =
+  const { items, handleAddToCart, checkInCartStatus, isLoadingItems } =
     useContext<any>(AppContext);
   const [searchedItems, setSearchedItems] = useState(items);
 

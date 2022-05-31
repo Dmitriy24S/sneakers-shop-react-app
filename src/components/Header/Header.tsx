@@ -2,11 +2,12 @@ import "./Header.scss";
 import { Link } from "react-router-dom";
 import React, { useContext } from "react";
 import { AppContext } from "../../App";
+import Drawer from "../Drawer/Drawer";
 
 // setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
 const Header = () => {
-  const { setIsCartDrawerOpen } = useContext<any>(AppContext);
+  const { setIsCartDrawerOpen, isCartDrawerOpen } = useContext<any>(AppContext);
 
   return (
     <header className="header">
@@ -67,6 +68,8 @@ const Header = () => {
               <span>£45.99</span>
             </button>
           </li>
+          {/* Cart drawer */}
+          {isCartDrawerOpen && <Drawer />}
           <li>
             <Link
               to="/sneakers-shop-react-app/favorites"

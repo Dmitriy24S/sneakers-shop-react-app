@@ -54,6 +54,7 @@
         color: hsl(0, 0%, 55%);
         font-weight: 700;
         transition: all 150ms ease-in-out;
+        overflow: hidden; // ? tab focus shape fix - overflow with line-height 1 for bottom align span text
         path {
           transition: all 150ms ease-in-out;
         }

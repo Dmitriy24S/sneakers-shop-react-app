@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Drawer from "./components/Drawer/Drawer";
 import Header from "./components/Header/Header";
 import Slider from "./components/Slider/Slider";
 import Main from "./pages/Main/Main";
@@ -266,6 +265,8 @@ function App() {
     <AppContext.Provider
       value={{
         setIsCartDrawerOpen,
+        isCartDrawerOpen,
+        handleDeleteFromCartDrawer,
         items,
         favorites,
         cartItems,
@@ -278,15 +279,11 @@ function App() {
     >
       <div className="App">
         <Header />
-        {isCartDrawerOpen && (
-          <Drawer handleDeleteFromCartDrawer={handleDeleteFromCartDrawer} />
-        )}
         <Routes>
           <Route
             path="/sneakers-shop-react-app/"
             element={
               <Main
-                handleAddToCart={handleAddToCart}
                 handleAddToFavorites={handleAddToFavorites}
                 searchInputValue={searchInputValue}
                 setSearchInputValue={setSearchInputValue}

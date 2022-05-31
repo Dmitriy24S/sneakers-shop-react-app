@@ -1,19 +1,23 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../App";
 import StatusMessage from "../StatusMessage/StatusMessage";
 import "./Drawer.scss";
 
 // setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-type DrawerProps = {
-  handleDeleteFromCartDrawer: any;
-};
+// type DrawerProps = {
+//   handleDeleteFromCartDrawer: any;
+// };
 
 const delay = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
-  const { setIsCartDrawerOpen, cartItems, setCartItems } =
-    useContext<any>(AppContext);
+const Drawer = () => {
+  const {
+    setIsCartDrawerOpen,
+    cartItems,
+    setCartItems,
+    handleDeleteFromCartDrawer,
+  } = useContext<any>(AppContext);
   const [isProcessingOrder, setIsProcessingOrder] = useState(false); // disable submit button while processing
   const [isOrderComplete, setIsOrderComplete] = useState(false); // shows order info status message component
   const [orderId, setOrderId] = useState(null);
@@ -44,13 +48,57 @@ const Drawer = ({ handleDeleteFromCartDrawer }: DrawerProps) => {
     setIsProcessingOrder(false); // ? finished the attempt at processing order, no longer processing order
   };
 
+  // Trap focus in open cart drawer
+  const cartDrawerRef = useRef<any>(null); // ! any ?
+  const trapFocusInModal = (e: any) => {
+    // ! any ?
+    if (e.key !== "Tab") return;
+
+    const focusableModalElements = cartDrawerRef.current.querySelectorAll(
+      "a[href], button:not([disabled]), textarea, input, select"
+    );
+
+    const firstElement = focusableModalElements[0];
+    const lastElement =
+      focusableModalElements[focusableModalElements.length - 1];
+
+    // if going forward by pressing tab and lastElement is active shift focus to first focusable element
+    if (!e.shiftKey && document.activeElement === lastElement) {
+      firstElement.focus();
+      return e.preventDefault();
+    }
+
+    // if going backward by pressing tab and firstElement is active shift focus to last focusable element
+    if (e.shiftKey && document.activeElement === firstElement) {
+      lastElement.focus();
+      e.preventDefault();
+    }
+  };
+
+  // Listen for ESC key to close cart drawer
+  useEffect(() => {
+    const closeCartDrawer = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsCartDrawerOpen(false);
+      }
+    };
+    window.addEventListener("keydown", closeCartDrawer);
+    return () => {
+      window.removeEventListener("keydown", closeCartDrawer);
+    };
+  }, [setIsCartDrawerOpen]);
+
   return (
     <section className="drawer">
       <div
         className="drawer-overlay"
         onClick={() => setIsCartDrawerOpen(false)}
       ></div>
-      <div className="drawer-content">
+      <div
+        className="drawer-content"
+        onKeyDown={trapFocusInModal}
+        ref={cartDrawerRef}
+      >
         <div className="drawer-top">
           <h2>Cart</h2>
           {/* Close cart btn/svg */}
