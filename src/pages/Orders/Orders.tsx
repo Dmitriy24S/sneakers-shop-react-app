@@ -60,7 +60,7 @@ const Orders = () => {
                   <article className="order" key={item.id}>
                     <div className="order-header">
                       <h4 className="order-number">Order #{item.id}</h4>
-                      <p className="order-price">£149.99</p>
+                      <p className="order-price">£{item.totalPrice}</p>
                     </div>
                     <p className="order-date">{dayDate}</p>
                     {/* products in order preview */}

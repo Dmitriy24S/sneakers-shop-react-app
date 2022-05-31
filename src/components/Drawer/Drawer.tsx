@@ -30,7 +30,7 @@ const Drawer = () => {
       // create order info in the backend
       const { data } = await axios.post(
         "https://628a5b65e5e5a9ad3223b0a7.mockapi.io/orders",
-        { order: cartItems }
+        { order: cartItems, totalPrice: totalCartPrice }
       );
       setOrderId(data.id);
       // delete items from cart in backend after have created the order in the backend
