@@ -109,10 +109,15 @@ function App() {
     }
   };
 
-  const handleDeleteFromCartDrawer = (id: string) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
-    axios.delete(`https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart/${id}`);
+  const handleDeleteFromCartDrawer = async (id: string) => {
+    try {
+      const updatedCart = cartItems.filter((item) => item.id !== id);
+      setCartItems(updatedCart);
+      axios.delete(`https://628a5b65e5e5a9ad3223b0a7.mockapi.io/cart/${id}`);
+    } catch (error) {
+      console.log("error when deleting from cart");
+      console.error(error);
+    }
   };
 
   const handleDeleteFavoriteFromFavoritePage = async (favorite: any) => {
