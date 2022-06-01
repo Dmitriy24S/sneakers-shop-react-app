@@ -14,6 +14,7 @@ const delay = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Drawer = () => {
   const {
+    isCartDrawerOpen,
     setIsCartDrawerOpen,
     cartItems,
     setCartItems,
@@ -91,7 +92,7 @@ const Drawer = () => {
   }, [setIsCartDrawerOpen]);
 
   return (
-    <section className="drawer">
+    <section className={`drawer ${isCartDrawerOpen && "active"}`}>
       <div
         className="drawer-overlay"
         onClick={() => setIsCartDrawerOpen(false)}

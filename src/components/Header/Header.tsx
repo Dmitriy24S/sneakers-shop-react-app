@@ -70,7 +70,9 @@ const Header = () => {
             </button>
           </li>
           {/* Cart drawer */}
-          {isCartDrawerOpen && <Drawer />}
+          {/* No transition: {isCartDrawerOpen && <Drawer />} */}
+          {/* With transition and hidden with css visibility: */}
+          <Drawer />
           <li>
             <Link
               to="/sneakers-shop-react-app/favorites"
