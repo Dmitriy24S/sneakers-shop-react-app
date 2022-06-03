@@ -2,7 +2,8 @@
   border: 1px solid hsl(0, 0%, 95%);
   border-radius: 40px;
   padding: 1.5rem;
-  width: 210px;
+  // width: 210px;
+  max-width: 210px;
   position: relative;
   display: flex;
   flex-direction: column;

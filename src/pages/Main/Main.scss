@@ -65,12 +65,19 @@ main {
 
 .items-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 210px);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   flex-wrap: wrap;
   justify-content: center;
+  justify-items: center;
+  align-items: stretch;
   gap: 2rem;
   margin-top: 2rem;
+  margin-bottom: 2rem;
   padding-bottom: 4rem;
+  @media (min-width: 600px) {
+    justify-content: left;
+    margin-bottom: 4rem;
+  }
 }
 
 .empty-data-message {
