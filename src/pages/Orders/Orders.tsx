@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
+import { CartItemType, OrderType } from "../../types";
 import "./Orders.scss";
 
 const Orders = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<OrderType[]>([]);
   //   const [orders, setOrders] = useState<[] | null>(null);
-  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState<boolean>(true);
 
   // Fetch order list on page load
   useEffect(() => {
@@ -53,7 +54,7 @@ const Orders = () => {
                 </article>
               )}
               {/* List orders */}
-              {orders?.map((item: any) => {
+              {orders?.map((item: OrderType) => {
                 let date = new Date(item.createdAt);
                 let dayDate = date.toDateString();
                 return (
@@ -65,7 +66,7 @@ const Orders = () => {
                     <p className="order-date">{dayDate}</p>
                     {/* products in order preview */}
                     <div className="order-preview-img">
-                      {item?.order?.map((item: any, index: number) => {
+                      {item?.order?.map((item: CartItemType, index: number) => {
                         if (index < 3) {
                           return (
                             <div className="preview-img--wrapper" key={item.id}>

@@ -1,14 +1,13 @@
 import "./Header.scss";
 import { Link } from "react-router-dom";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../App";
 import Drawer from "../Drawer/Drawer";
 import { useCart } from "../../hooks/useCart";
-
-// setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+import { AppContextType } from "../../types";
 
 const Header = () => {
-  const { setIsCartDrawerOpen, isCartDrawerOpen } = useContext<any>(AppContext);
+  const { setIsCartDrawerOpen } = useContext(AppContext) as AppContextType;
   const { totalCartPrice } = useCart();
   return (
     <header className="header">

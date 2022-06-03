@@ -3,11 +3,9 @@
 import { useContext } from "react";
 import { AppContext } from "../../App";
 import Card from "../../components/Card";
+import { AppContextType, CartItemType } from "../../types";
 
-const Favorites = ({
-  handleDeleteFavoriteFromFavoritePage,
-  checkFavoriteStatus,
-}: any) => {
+const Favorites = () => {
   // Get / update favorites from backend when open favorites
   // useEffect(() => {
   //   axios
@@ -17,8 +15,7 @@ const Favorites = ({
   //     });
   // }, []);
 
-  const { favorites, handleAddToCart, checkInCartStatus } =
-    useContext<any>(AppContext);
+  const { favorites } = useContext(AppContext) as AppContextType;
 
   return (
     <main>
@@ -34,18 +31,8 @@ const Favorites = ({
             </article>
           )}
           {/* List favorites */}
-          {favorites?.map((item: any) => {
-            return (
-              <Card
-                key={item.id}
-                item={item}
-                handleAddToCart={handleAddToCart}
-                handleAddToFavorites={handleDeleteFavoriteFromFavoritePage}
-                checkFavoriteStatus={checkFavoriteStatus}
-                checkInCartStatus={checkInCartStatus}
-                location={"favorites"}
-              />
-            );
+          {favorites?.map((item: CartItemType) => {
+            return <Card key={item.id} item={item} location={"favorites"} />;
           })}
         </section>
       </div>

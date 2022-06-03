@@ -6,16 +6,18 @@ import Slider from "./components/Slider/Slider";
 import Main from "./pages/Main/Main";
 import Favorites from "./pages/Favorites/Favorites";
 import Orders from "./pages/Orders/Orders";
+import { AppContextType, CartItemType } from "./types";
 
-export const AppContext = createContext({});
+// export const AppContext = createContext({});
+export const AppContext = createContext<AppContextType | null>(null);
 
 function App() {
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState<boolean>(false);
   const [items, setItems] = useState([]);
-  const [cartItems, setCartItems] = useState<any[]>([]);
-  const [searchInputValue, setSearchInputValue] = useState("");
-  const [favorites, setFavorites] = useState<any[]>([]);
-  const [isLoadingItems, setisLoadingItems] = useState(true);
+  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const [searchInputValue, setSearchInputValue] = useState<string>("");
+  const [favorites, setFavorites] = useState<CartItemType[]>([]);
+  const [isLoadingItems, setisLoadingItems] = useState<boolean>(true);
 
   // Get / update cart info when open cart drawer
   // useEffect(() => {
@@ -26,7 +28,7 @@ function App() {
   //     });
   // }, [isCartDrawerOpen]);
 
-  const handleAddToCart = async (item: any, location: string) => {
+  const handleAddToCart = async (item: CartItemType, location: string) => {
     // If toggle to cart button on  main page
     if (location === "main") {
       try {
@@ -120,45 +122,60 @@ function App() {
     }
   };
 
-  const handleDeleteFavoriteFromFavoritePage = async (favorite: any) => {
-    try {
-      const updatedCart = favorites.filter((item) => item.id !== favorite.id);
-      setFavorites(updatedCart);
-      axios.delete(
-        `https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites/${favorite.id}`
-      );
-    } catch (error) {
-      console.log("error when deleteing from favorites");
-      console.error(error);
-    }
-  };
-
-  const handleAddToFavorites = async (item: any) => {
-    try {
-      // In main click on add to cart btn -> check cart for matching item / check if in cart already
-      const findItem = favorites.find(
-        (favorite) => Number(item.id) === Number(favorite.storeId)
-      );
-      if (findItem) {
-        // If item already in cart remove it from cart / Undo add to cart
-        setFavorites(
-          favorites.filter((favorite) => favorite.storeId !== item.id)
+  const handleAddToFavorites = async (item: CartItemType, location: string) => {
+    if (location === "main") {
+      try {
+        // In main click on add to favorites btn -> check favorites for matching item / check if in favorites already
+        const findItem = favorites.find(
+          (favorite) => Number(item.id) === Number(favorite.storeId)
         );
-        axios.delete(
-          `https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites/${findItem.id}`
-        );
-      } else {
-        // Add new item to cart
-        setFavorites([...favorites, item]);
-        axios.post(
-          "https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites",
-          item
-        );
+        if (findItem) {
+          // If item already in favorites remove it from favorites / Undo add to favorites
+          setFavorites(
+            favorites.filter((favorite) => favorite.storeId !== item.id)
+          );
+          axios.delete(
+            `https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites/${findItem.id}`
+          );
+        } else {
+          // Add new favorite
+          setFavorites([...favorites, item]);
+          const { data } = await axios.post(
+            "https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites",
+            item
+          );
+          // give up-to-date id? mockAPI quirk?
+          setFavorites((prev) =>
+            prev.map((cartItem) => {
+              if (cartItem.id === data.storeId) {
+                return {
+                  ...cartItem,
+                  id: data.id,
+                };
+              }
+              return cartItem;
+            })
+          );
+        }
+      } catch (error) {
+        alert("error when adding to favorite");
+        console.log("error when adding to favorites");
+        console.error(error);
       }
-    } catch (error) {
-      alert("error when adding to favorite");
-      console.log("error when adding to favorites");
-      console.error(error);
+    } else {
+      // in favorites click favorite btn to unfavorite
+      try {
+        const updatedCart = favorites.filter(
+          (favorite) => favorite.id !== item.id
+        );
+        setFavorites(updatedCart);
+        axios.delete(
+          `https://628a5b65e5e5a9ad3223b0a7.mockapi.io/favorites/${item.id}`
+        );
+      } catch (error) {
+        console.log("error when deleteing from favorites");
+        console.error(error);
+      }
     }
   };
 
@@ -239,29 +256,23 @@ function App() {
     }
   }, [isCartDrawerOpen]);
 
-  const checkFavoriteStatusInMain = (id: string) => {
+  const checkFavoriteStatus = (obj: CartItemType) => {
     return favorites.some(
-      (favorite: any) => Number(favorite.storeId) === Number(id)
+      (favorite: CartItemType) =>
+        Number(favorite.storeId) === Number(obj.storeId)
     );
   };
 
-  const checkFavoriteStatusInFavorites = (id: string) => {
-    return favorites.some(
-      (favorite: any) => Number(favorite.id) === Number(id)
-    );
-  };
-
-  // const checkInCartStatus = (id: string, location: string) => {
-  const checkInCartStatus = (obj: any, location: string) => {
+  const checkInCartStatus = (obj: CartItemType, location: string) => {
     // in main page check
     if (location === "main") {
       return cartItems.some(
-        (item: any) => Number(item.storeId) === Number(obj.id)
+        (item: CartItemType) => Number(item.storeId) === Number(obj.id)
       );
     } else {
       // in favorite check
       return cartItems.some(
-        (item: any) => Number(item.storeId) === Number(obj.storeId)
+        (item: CartItemType) => Number(item.storeId) === Number(obj.storeId)
       );
     }
   };
@@ -271,15 +282,17 @@ function App() {
       value={{
         setIsCartDrawerOpen,
         isCartDrawerOpen,
-        handleDeleteFromCartDrawer,
         items,
         favorites,
         cartItems,
         setCartItems,
         handleAddToCart,
+        handleAddToFavorites,
+        handleDeleteFromCartDrawer,
         checkInCartStatus,
         isLoadingItems,
         setisLoadingItems,
+        checkFavoriteStatus,
       }}
     >
       <div className="App">
@@ -289,24 +302,15 @@ function App() {
             path="/sneakers-shop-react-app/"
             element={
               <Main
-                handleAddToFavorites={handleAddToFavorites}
                 searchInputValue={searchInputValue}
                 setSearchInputValue={setSearchInputValue}
-                checkFavoriteStatus={checkFavoriteStatusInMain}
                 Slider={<Slider />}
               />
             }
           ></Route>
           <Route
             path="/sneakers-shop-react-app/favorites"
-            element={
-              <Favorites
-                handleDeleteFavoriteFromFavoritePage={
-                  handleDeleteFavoriteFromFavoritePage
-                }
-                checkFavoriteStatus={checkFavoriteStatusInFavorites}
-              />
-            }
+            element={<Favorites />}
           ></Route>
           <Route
             path="/sneakers-shop-react-app/orders"

@@ -3,16 +3,14 @@ import { AppContext } from "../../App";
 import debounce from "lodash.debounce";
 import Card from "../../components/Card";
 import "./Main.scss";
+import { AppContextType, CartItemType, MainPropType } from "../../types";
 
 const Main = ({
+  Slider,
   searchInputValue,
   setSearchInputValue,
-  handleAddToFavorites,
-  Slider,
-  checkFavoriteStatus,
-}: any) => {
-  const { items, handleAddToCart, checkInCartStatus, isLoadingItems } =
-    useContext<any>(AppContext);
+}: MainPropType) => {
+  const { items, isLoadingItems } = useContext(AppContext) as AppContextType;
   const [searchedItems, setSearchedItems] = useState(items);
 
   const handleSearch = (text: string) => {
@@ -23,7 +21,7 @@ const Main = ({
     }
     // filter shown items
     setSearchedItems(
-      items.filter((item: any) =>
+      items.filter((item: CartItemType) =>
         item.title.toLowerCase().includes(text.toLowerCase())
       )
     );
@@ -79,14 +77,10 @@ const Main = ({
         <section className="items-container">
           {/* if items not loaded use placeholder array for skeleton */}
           {(isLoadingItems ? [...Array(7)] : searchedItems).map(
-            (item: any, index: number) => (
+            (item: CartItemType, index: number) => (
               <Card
                 key={item ? item.id : index}
                 item={item}
-                handleAddToCart={handleAddToCart}
-                handleAddToFavorites={handleAddToFavorites}
-                checkFavoriteStatus={checkFavoriteStatus}
-                checkInCartStatus={checkInCartStatus}
                 location={"main"}
                 isLoadingItems={isLoadingItems}
               />

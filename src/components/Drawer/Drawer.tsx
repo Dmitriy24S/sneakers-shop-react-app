@@ -2,15 +2,11 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../App";
 import { useCart } from "../../hooks/useCart";
+import { AppContextType, CartItemType } from "../../types";
 import StatusMessage from "../StatusMessage/StatusMessage";
 import "./Drawer.scss";
 
-// setIsCartDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-// type DrawerProps = {
-//   handleDeleteFromCartDrawer: any;
-// };
-
-const delay = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Drawer = () => {
   const {
@@ -19,7 +15,7 @@ const Drawer = () => {
     cartItems,
     setCartItems,
     handleDeleteFromCartDrawer,
-  } = useContext<any>(AppContext);
+  } = useContext(AppContext) as AppContextType;
   const [isProcessingOrder, setIsProcessingOrder] = useState(false); // disable submit button while processing
   const [isOrderComplete, setIsOrderComplete] = useState(false); // shows order info status message component
   const [orderId, setOrderId] = useState(null);
@@ -52,29 +48,32 @@ const Drawer = () => {
   };
 
   // Trap focus in open cart drawer
-  const cartDrawerRef = useRef<any>(null); // ! any ?
-  const trapFocusInModal = (e: any) => {
-    // ! any ?
+  const cartDrawerRef = useRef<HTMLDivElement>(null);
+  const trapFocusInModal = (e: React.KeyboardEvent) => {
     if (e.key !== "Tab") return;
 
-    const focusableModalElements = cartDrawerRef.current.querySelectorAll(
-      "a[href], button:not([disabled]), textarea, input, select"
-    );
+    // TS Guard? defined element. Capture first/last elements inside cart drawer
+    if (cartDrawerRef.current != null) {
+      const focusableModalElements = cartDrawerRef.current.querySelectorAll(
+        "a[href], button:not([disabled]), textarea, input, select"
+      );
 
-    const firstElement = focusableModalElements[0];
-    const lastElement =
-      focusableModalElements[focusableModalElements.length - 1];
+      const firstElement = focusableModalElements[0] as HTMLElement;
+      const lastElement = focusableModalElements[
+        focusableModalElements.length - 1
+      ] as HTMLElement;
 
-    // if going forward by pressing tab and lastElement is active shift focus to first focusable element
-    if (!e.shiftKey && document.activeElement === lastElement) {
-      firstElement.focus();
-      return e.preventDefault();
-    }
+      // if going forward by pressing tab and lastElement is active shift focus to first focusable element
+      if (!e.shiftKey && document.activeElement === lastElement) {
+        firstElement.focus();
+        return e.preventDefault();
+      }
 
-    // if going backward by pressing tab and firstElement is active shift focus to last focusable element
-    if (e.shiftKey && document.activeElement === firstElement) {
-      lastElement.focus();
-      e.preventDefault();
+      // if going backward by pressing tab and firstElement is active shift focus to last focusable element
+      if (e.shiftKey && document.activeElement === firstElement) {
+        lastElement.focus();
+        e.preventDefault();
+      }
     }
   };
 
@@ -137,7 +136,7 @@ const Drawer = () => {
         {cartItems.length > 0 ? (
           <>
             <section className="cart-content">
-              {cartItems.map((item: any) => {
+              {cartItems.map((item: CartItemType) => {
                 return (
                   <article key={item.id} className="cart-item">
                     {/* info */}

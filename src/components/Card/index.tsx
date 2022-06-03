@@ -1,15 +1,16 @@
 import s from "./Card.module.scss";
 import ContentLoader from "react-content-loader";
+import { useContext } from "react";
+import { AppContext } from "../../App";
+import { AppContextType, CardPropsType } from "../../types";
 
-const Card = ({
-  item,
-  handleAddToCart,
-  handleAddToFavorites,
-  checkFavoriteStatus,
-  checkInCartStatus,
-  location,
-  isLoadingItems,
-}: any) => {
+const Card = ({ item, location, isLoadingItems }: CardPropsType) => {
+  const {
+    handleAddToCart,
+    handleAddToFavorites,
+    checkFavoriteStatus,
+    checkInCartStatus,
+  } = useContext(AppContext) as AppContextType;
   // if items not loaded use placeholder skeleton */}
   return isLoadingItems ? (
     <ContentLoader
@@ -32,13 +33,13 @@ const Card = ({
   ) : (
     <article className={s.itemCard}>
       {/* If item is favorited show active button */}
-      {checkFavoriteStatus(item.id) ? (
+      {checkFavoriteStatus(item) ? (
         <>
           {/* remove from favorite btn */}
           <button
             aria-label="remove from favorites"
             className={s.removeFromFavoritesBtn}
-            onClick={() => handleAddToFavorites(item)}
+            onClick={() => handleAddToFavorites(item, location)}
           >
             <svg
               width="32"
@@ -74,7 +75,7 @@ const Card = ({
           <button
             aria-label="add to favorites"
             className={s.addToFavoritesBtn}
-            onClick={() => handleAddToFavorites(item)}
+            onClick={() => handleAddToFavorites(item, location)}
           >
             <svg
               width="32"
