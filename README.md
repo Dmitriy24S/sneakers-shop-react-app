@@ -1,4 +1,14 @@
-# Getting Started with Create React App
+# Sneakers shop react app
+
+![Design preview for Sneakers shop react app](./design/preview.png)
+
+## Welcome 
+
+Sneakers shop react app. Created with React, SCSS, mockAPI & SwiperJS.
+
+[Live Demo](https://dmitriy24s.github.io/sneakers-shop-react-app/) 👈
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
